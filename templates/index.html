@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XML to JSON Converter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light p-4">
+    <div class="container">
+        <h1 class="mb-4">🛠️ Convert XML to JSON</h1>
+
+        <!-- File Upload Form -->
+        <form method="post" enctype="multipart/form-data" class="mb-4">
+            <div class="mb-3">
+                <label for="file" class="form-label">📄 Upload XML File:</label>
+                <input type="file" class="form-control" name="file" id="file" accept=".xml" required>
+            </div>
+            <button type="submit" class="btn btn-primary">🔁 Convert</button>
+        </form>
+
+        {% if json_data %}
+        <!-- ✅ Success Alert -->
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            ✅ XML converted successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- 📦 JSON Output Section -->
+        <h4>📦 Converted JSON:</h4>
+        <button onclick="copyJSON()" class="btn btn-outline-secondary btn-sm mb-2">📋 Copy JSON</button>
+
+        <pre id="jsonOutput" class="bg-white p-3 border rounded" style="max-height: 400px; overflow: auto;">
+{{ json_data | tojson(indent=4) }}
+        </pre>
+
+        {% if json_filename %}
+        <a class="btn btn-success mt-3" href="{{ url_for('download_file', filename=json_filename) }}">
+            ⬇️ Download JSON
+        </a>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    <!-- ✅ Bootstrap & Clipboard Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyJSON() {
+            const text = document.getElementById("jsonOutput").innerText;
+            navigator.clipboard.writeText(text).then(function() {
+                alert("📋 JSON copied to clipboard!");
+            }, function(err) {
+                alert("❌ Failed to copy JSON.");
+            });
+        }
+    </script>
+</body>
+</html>
